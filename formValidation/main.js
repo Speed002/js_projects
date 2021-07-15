@@ -6,19 +6,20 @@ const password2  = document.getElementById('password2');
 
 //Functions
 function showError(input, message){
-    //traversing the parent of the input
+    //traversing the parent <div> of the input
     const formControl = input.parentElement
-    //altering the class of that element
+    //altering the class of the parent element <div>, these classnames added below have been defined in the css
     formControl.className = 'form-control error'
+    //targetting the error tag
     const small = formControl.querySelector('small')
     small.innerText = message
 }
 
 function showSuccess(input){
-        //traversing the parent of the input
-        const formControl = input.parentElement
-        //altering the class of that element
-        formControl.className = 'form-control success'
+    //traversing the parent of the input
+    const formControl = input.parentElement
+    //altering the class of that element
+    formControl.className = 'form-control success'
 }
 
 function checkEmail(input){
@@ -40,14 +41,16 @@ function checkRequired(inputArr){
     })
 }
 
-function checkLength(input, min, max){
-    if(input.value.length < min){
-        showError(input, `${getFieldName(input)} must be at least ${min} characters`)
-    }else if(input.value.length > max){
-        showError(input, `${getFieldName(input)} must be at less than ${max} characters`)
-    }else{
-        showSuccess(input)
-    }
+function checkLength(inputArr, min, max){
+    inputArr.forEach(input => {
+        if(input.value.length < min){
+            showError(input, `${getFieldName(input)} must be at least ${min} characters`)
+        }else if(input.value.length > max){
+            showError(input, `${getFieldName(input)} must be at less than ${max} characters`)
+        }else{
+            showSuccess(input)
+        } 
+    });
 }
 
 function checkPasswordsMatch(input1, input2){
@@ -68,8 +71,8 @@ function welcome(){
 form.addEventListener('submit', function(e){
     e.preventDefault() 
     checkRequired([username, email, password, password2]);
-    checkLength(username, 3, 15)
-    checkLength(password, 6, 25)
+    checkLength([username, password], 3, 15)
+    // checkLength(password, 6, 25)
     checkEmail(email);
     checkPasswordsMatch(password, password2);
     
